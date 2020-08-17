@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>Login</title>
   </head>
+
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <h1>Login</h1>
+    
+    <form id="loginForm" action="/quiz" method="post">
+      <input type="hidden" name="requestType" value="login">
+      <label for="name">Name: </label>
+      <input type="text" name="name" required>
+      <button type="submit">Login</button>
+    </form>
   </body>
 </html>
