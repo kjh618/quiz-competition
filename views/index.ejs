@@ -17,17 +17,20 @@
     <div id="controlPanel">
       <button class="controlPanelButton" onclick="onPlayNextClick()" disabled>Play Next</button>
       <button class="controlPanelButton" onclick="onPlayAgainClick()" disabled>Play Again</button>
-      <div id="statusMessage">Loading... (0/<%= quiz.length %>)</div>
+      <div class="controlPanelMessage" id="loadingMessage">Loading... (0/<%= quiz.length %>)</div>
+      <div class="controlPanelMessage" id="playingIndicator">Not started</div>
       <% for (let q of quiz) { %>
-      <audio id="<%= 'audioSrc' + q.question %>" src="<%= q.question %>" preload="auto"
-        oncanplaythrough="onAudioCanPlayThrough()" onended="onAudioEnded()"></audio>
+      <audio class="questionAudio" id="<%= 'audioSrc' + q.question %>" src="<%= q.question %>" preload="auto"
+        oncanplaythrough="onAudioCanPlayThrough(this.id)" onended="onAudioEnded()"></audio>
       <% } %>
     </div>
 
     <div id="quizContent">
       <ul>
         <% for (let q of quiz) { %>
-        <li class="quizChoice"><%= q.answer %></li>
+        <li class="choiceItem" id="<%= 'choice' + q.answer %>" onclick="onQuizChoiceClick(this.innerText)">
+          <%= q.answer %>
+        </li>
         <% } %>
       </ul>
     </div>
