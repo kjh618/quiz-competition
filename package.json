@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/kjh618/quiz-competition#readme",
   "dependencies": {
+    "ejs": "^3.1.5",
     "express": "^4.17.1",
     "socket.io": "^2.3.0"
   }

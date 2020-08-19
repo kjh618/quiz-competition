@@ -3,19 +3,24 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-app.use(express.static('public'));
+const quiz = require('./quiz.json');
+
+app.set('views', './views');
+app.set('view engine', 'ejs');
+
+app.use(express.static('./public'));
 
 app.get('/', (req, res) => {
-  res.sendFile('/public/index.html');
+  res.render('index', { quiz });
 });
 
 http.listen(3000, () => {
   console.log('listening on *:3000');
 });
 
-let players = [];
-let questions = require('./questions.json');
-
+let players = []; // [{ name: ..., socketId: ..., score: ... }, ...]
+let questions = quiz.map(q => q.question);
+let currentQuestionIndex = -1;
 io.on('connection', socket => {
   socket.on('self connect', playerName => {
     let player = players.find(p => p.name === playerName);
@@ -35,8 +40,18 @@ io.on('connection', socket => {
     console.log(`${player.name} disconnected`);
   });
 
-  socket.on('song request', (clientCallback) => {
-    let songs = questions.map(q => q.question);
-    clientCallback(songs);
-  })
+  socket.on('play next click', () => {
+    if (currentQuestionIndex !== -1) {
+      questions.splice(currentQuestionIndex, 1);
+    }
+
+    currentQuestionIndex = Math.floor(Math.random() * questions.length);
+    io.emit('play next', questions[currentQuestionIndex]);
+  });
+
+  socket.on('play again click', () => {
+    if (currentQuestionIndex !== -1) {
+      io.emit('play again', questions[currentQuestionIndex]);
+    }
+  });
 });

@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Quiz</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <div id="sidebar">
+    <div>Players</div>
+    <ul id="playerList">
+    </ul>
+  </div>
+
+  <div id="main">
+    <div id="controlPanel">
+      <button class="controlPanelButton" onclick="onPlayNextClick()" disabled>Play Next</button>
+      <button class="controlPanelButton" onclick="onPlayAgainClick()" disabled>Play Again</button>
+      <div id="statusMessage">Loading... (0/<%= quiz.length %>)</div>
+      <% for (let q of quiz) { %>
+      <audio id="<%= 'audioSrc' + q.question %>" src="<%= q.question %>" preload="auto"
+        oncanplaythrough="onAudioCanPlayThrough()" onended="onAudioEnded()"></audio>
+      <% } %>
+    </div>
+
+    <div id="quizContent">
+      <ul>
+        <% for (let q of quiz) { %>
+        <li class="quizChoice"><%= q.answer %></li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/index.js"></script>
+</body>
+
+</html>
